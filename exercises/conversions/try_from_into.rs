@@ -11,8 +11,6 @@ struct Color {
     blue: u8,
 }
 
-// I AM NOT DONE
-
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
 // You need to create an implementation for a tuple of three integers,
@@ -25,19 +23,41 @@ struct Color {
 // Tuple implementation
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = String;
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let a: [i16; 3] = [tuple.0, tuple.1, tuple.2];
+        Color::try_from(a)
+    }
 }
 
 // Array implementation
 impl TryFrom<[i16; 3]> for Color {
     type Error = String;
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        Color::try_from(&arr[..])
+    }
 }
 
 // Slice implementation
 impl TryFrom<&[i16]> for Color {
     type Error = String;
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err("kindly fuck off".to_string());
+        }
+        let (r, g, b) = (slice[0], slice[1], slice[2]);
+        if r > 255 || g > 255 || b > 255 {
+            return Err("please fornicate yourself".to_string());
+        }
+        if r < 0 || g < 0 || b < 0 {
+            return Err("you don't seem to be getting the hint".to_string());
+        }
+        let (r, g, b) = (r as u8, g as u8, b as u8);
+        Ok(Color {
+            red: r,
+            green: g,
+            blue: b,
+        })
+    }
 }
 
 fn main() {
